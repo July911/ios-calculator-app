@@ -93,6 +93,9 @@
                                                 <state key="normal" title="CE">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="touchUpCEbutton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jro-10-GD3"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="swithPM" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ows-U7-mNc">
                                                 <rect key="frame" x="195" y="0.0" width="89.5" height="89.5"/>
@@ -127,6 +130,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="ofO-TD-zJe"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rq6-PG-B5q"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="8" contentMode="scaleToFill" restorationIdentifier="8.0" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgT-2D-A49">
@@ -138,6 +142,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="lIZ-2L-Sgz"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dc5-0I-IrQ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="9" contentMode="scaleToFill" restorationIdentifier="9" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcj-xJ-ruw">
@@ -176,6 +181,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="SCR-PN-mbb"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="37r-bD-KhW"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" restorationIdentifier="5" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vpW-df-OLm">
@@ -187,6 +193,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="l3X-Rr-7hl"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cAd-pN-XkV"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="6" contentMode="scaleToFill" restorationIdentifier="6" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OaY-Mw-CPv">
@@ -225,6 +232,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="OzN-NJ-64Q"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Yw5-4M-nJp"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" restorationIdentifier="2" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rif-2S-UU2">
@@ -274,6 +282,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="53h-DM-Lty"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iPo-6E-6eN"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="00" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sH6-8l-kje">
@@ -296,6 +305,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="touchUpNumberButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vu1-Z2-pPU"/>
+                                                    <action selector="touchUpNumberButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MZn-ct-kMh"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Daw-iX-Owl">
@@ -351,6 +361,10 @@
                             <constraint firstItem="DC3-Ia-6L7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="vTI-88-p1o"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="currentNumber" destination="Lwz-OF-XHD" id="L9L-UL-mb3"/>
+                        <outlet property="currentOperator" destination="HPC-iy-qdm" id="SzC-Rj-aF8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
