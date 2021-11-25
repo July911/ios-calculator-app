@@ -12,14 +12,107 @@ class ViewController: UIViewController {
     private var temporaryOperandValues: [String] = []
     private var isOperatorEntered: Bool = false
     private var signIsPositive: Bool = true
- 
     var isCalculated: Bool = false
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        temporaryOperandValues.removeAll()
         currentValueLabel.text = initialValue
+    }
+    
+    @IBAction private func hitOperandButton(_ sender: UIButton) {
+        guard let inputButtonTitle = sender.titleLabel?.text,
+              temporaryOperandValues.count <= 20  else {
+                  return
+              }
+        
+        if temporaryOperandValues.hasComma() {
+            guard !inputButtonTitle.hasComma() else { return }
+        } else {
+            if (inputButtonTitle == "0" && temporaryOperandValues.first == "0") ||
+                (inputButtonTitle == "00" && temporaryOperandValues.first == "0") {
+                return
+            }
+        }
+        temporaryOperandValues.append(inputButtonTitle)
+        
+        let addcommaOperand: String
+        
+        if temporaryOperandValues.hasComma() {
+            addcommaOperand = temporaryOperandValues.joined()
+        } else {
+            addcommaOperand = addCommaToValue(Double(temporaryOperandValues.joined()) ?? 0)
+        }
+        
+        if signIsPositive {
+            currentValueLabel.text = addcommaOperand
+        } else {
+            currentValueLabel.text = "-" + addcommaOperand
+        }
+        isOperatorEntered = false
+    }
+    
+    @IBAction private func hitOperatorButton(_ sender: UIButton) {
+        guard let inputButtonTitle = sender.titleLabel?.text else {
+            return
+        }
+        addOperandToValuesForCalculate()
+        resetTemporaryOerandValues()
+        
+        if isOperatorEntered {
+            valuesForCalculate.removeLast()
+            valuesForCalculate.append(inputButtonTitle)
+        } else {
+            valuesForCalculate.append(inputButtonTitle)
+            isOperatorEntered = true
+        }
+        currentOperatorLabel.text = inputButtonTitle
+    }
+    
+    @IBAction private func hitACButton(_ sender: UIButton) {
+        resetToInitialState()
+        removeStackViewContents()
+        currentValueLabel.text = initialValue
+    }
+    
+    @IBAction private func hitCEButton(_ sender: UIButton) {
+        resetTemporaryOerandValues()
+        currentValueLabel.text = initialValue
+    }
+    
+    @IBAction private func hitCodeConversionButton(_ sender: UIButton) {
+        guard currentValueLabel.text != initialValue else {
+            return
+        }
+        guard let currentOperand = currentValueLabel.text,
+              let doubleTypeOperand = Double(currentOperand) else {
+                  return
+              }
+        signIsPositive = !signIsPositive
+        currentValueLabel.text = String(format: "%.4g", doubleTypeOperand * -1)
+    }
+    
+    @IBAction private func hitEqualButton(_ sender: UIButton) {
+        guard isCalculated == false,
+              !valuesForCalculate.isEmpty else {
+                  resetTemporaryOerandValues()
+                  return
+              }
+        addOperandToValuesForCalculate()
+        resetTemporaryOerandValues()
+        let calculator = ExpressionParser.self
+        let doubleTypeResult = calculator.parse(from: valuesForCalculate.joined()).result()
+        
+        if doubleTypeResult.isNaN {
+            resetToInitialState()
+            currentValueLabel.text = "NaN"
+        } else {
+            resetToInitialState()
+            let insertedComma = String(doubleTypeResult).insertComma()
+            let intergerAndDecimal = insertedComma.split(with: ".")
+            
+            currentValueLabel.text = (intergerAndDecimal.last == "0" ? intergerAndDecimal.first : insertedComma)
+        }
+        isCalculated = true
     }
     
     private func addToFormulaHistory() {
@@ -45,37 +138,6 @@ class ViewController: UIViewController {
         formulaStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
-    @IBAction private func hitOperandButton(_ sender: UIButton) {
-        guard let inputButtonTitle = sender.titleLabel?.text,
-                  temporaryOperandValues.count <= 20  else {
-                  return
-              }
-        
-        if temporaryOperandValues.hasComma() {
-            guard !inputButtonTitle.hasComma() else { return }
-        } else {
-            if (inputButtonTitle == "0" && temporaryOperandValues.first == "0") ||
-                    (inputButtonTitle == "00" && temporaryOperandValues.first == "0") {
-                return
-            }
-        }
-        temporaryOperandValues.append(inputButtonTitle)
-        
-        let addcommaOperand: String
-        if temporaryOperandValues.hasComma() {
-            addcommaOperand = temporaryOperandValues.joined()
-        } else {
-            addcommaOperand = addCommaToValue(Double(temporaryOperandValues.joined()) ?? 0)
-        }
-        
-        if signIsPositive {
-            currentValueLabel.text = addcommaOperand
-        } else {
-            currentValueLabel.text = "-" + addcommaOperand
-        }
-        isOperatorEntered = false
-    }
-    
     private func addOperandToValuesForCalculate() {
         if signIsPositive {
             valuesForCalculate.append(temporaryOperandValues.joined())
@@ -83,7 +145,7 @@ class ViewController: UIViewController {
             valuesForCalculate.append("-" + temporaryOperandValues.joined())
         }
         
-        if valuesForCalculate != [initialValue] {
+        if !valuesForCalculate.isEmpty {
             addToFormulaHistory()
             formulaScrollView.scrollViewToBottom()
         }
@@ -91,22 +153,6 @@ class ViewController: UIViewController {
         resetTemporaryOerandValues()
         isCalculated = false
         signIsPositive = true
-    }
-    
-    @IBAction private func hitOperatorButton(_ sender: UIButton) {
-        guard let inputButtonTitle = sender.titleLabel?.text else {
-            return
-        }
-        addOperandToValuesForCalculate()
-        resetTemporaryOerandValues()
-        if isOperatorEntered {
-            valuesForCalculate.removeLast()
-            valuesForCalculate.append(inputButtonTitle)
-        } else {
-            valuesForCalculate.append(inputButtonTitle)
-            isOperatorEntered = true
-        }
-        currentOperatorLabel.text = inputButtonTitle
     }
     
     func resetToInitialState() {
@@ -119,53 +165,6 @@ class ViewController: UIViewController {
     func resetTemporaryOerandValues() {
         temporaryOperandValues.removeAll()
         currentValueLabel.text = initialValue
-    }
-    
-    @IBAction private func hitACButton(_ sender: UIButton) {
-        resetToInitialState()
-        removeStackViewContents()
-        currentValueLabel.text = initialValue
-    }
-    
-    @IBAction private func hitCEButton(_ sender: UIButton) {
-        resetTemporaryOerandValues()
-        currentValueLabel.text = initialValue
-    }
-    
-    @IBAction private func hitCodeConversionButton(_ sender: UIButton) {
-        guard currentValueLabel.text != initialValue else {
-            return
-        }
-        guard let currentOperand = currentValueLabel.text,
-              let doubleTypeOperand = Double(currentOperand) else {
-                  return
-              }
-        signIsPositive = !signIsPositive
-        currentValueLabel.text = String(format: "%.4g", doubleTypeOperand * -1)
-    }
-
-    
-    @IBAction private func hitEqualButton(_ sender: UIButton) {
-        guard isCalculated == false,
-              !valuesForCalculate.isEmpty else {
-                  resetTemporaryOerandValues()
-              return
-        }
-        addOperandToValuesForCalculate()
-        resetTemporaryOerandValues()
-        let calculator = ExpressionParser.self
-        let doubleTypeResult = calculator.parse(from: valuesForCalculate.joined()).result()
-        if doubleTypeResult.isNaN {
-            resetToInitialState()
-            currentValueLabel.text = "NaN"
-        } else {
-            resetToInitialState()
-            let insertedComma = String(doubleTypeResult).insertComma()
-            let intergerAndDecimal = insertedComma.split(with: ".")
-            
-            currentValueLabel.text = (intergerAndDecimal.last == "0" ? intergerAndDecimal.first : insertedComma)
-        }
-        isCalculated = true
     }
     
     private func addCommaToValue(_ value: Double) -> String {
