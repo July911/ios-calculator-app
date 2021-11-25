@@ -1,10 +1,26 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    @IBOutlet private var formulaScrollView: UIScrollView!
+    @IBOutlet private var formulaStackView: UIStackView!
+    @IBOutlet private var currentOperatorLabel: UILabel!
+    @IBOutlet private var currentValueLabel: UILabel!
+    
+    private let initialValue = "0"
+    private var valuesForCalculate: [String] = []
+    private var temporaryOperandValues: [String] = []
+    private var isOperatorEntered: Bool = false
+    private var signIsPositive: Bool = true
+    private var hasComma: Bool {
+        temporaryOperandValues.contains(".")
+    }
+    var isCalculated: Bool = false
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        temporaryOperandValues = [initialValue]
+        temporaryOperandValues.removeAll()
         currentValueLabel.text = initialValue
     }
     
@@ -32,30 +48,20 @@ class ViewController: UIViewController {
     }
     
     @IBAction private func hitOperandButton(_ sender: UIButton) {
-        guard let inputButtonTitle = sender.titleLabel?.text else {
-            return
-        }
-        guard temporaryOperandValues.count <= 20 else {
-            return
-        }
+        guard let inputButtonTitle = sender.titleLabel?.text,
+                  temporaryOperandValues.count <= 20  else {
+                  return
+              }
         
-        if temporaryOperandValues.contains(".") {
-            guard inputButtonTitle != "." else {
-                return
-            }
+        if hasComma {
+            guard !inputButtonTitle.hasComma() else { return }
         } else {
-            guard inputButtonTitle != "0" || temporaryOperandValues.first != "0" else {
-                return
-            }
-            guard inputButtonTitle != "00" || temporaryOperandValues.first != "0" else {
+            if (inputButtonTitle == "0" && temporaryOperandValues.first == "0") ||
+                    (inputButtonTitle == "00" && temporaryOperandValues.first == "0") {
                 return
             }
         }
         temporaryOperandValues.append(inputButtonTitle)
-        
-        if !temporaryOperandValues.contains(".") && temporaryOperandValues.first == initialValue {
-            temporaryOperandValues.removeFirst()
-        }
         
         let addcommaOperand: String
         if temporaryOperandValues.contains(".") {
@@ -84,7 +90,7 @@ class ViewController: UIViewController {
             formulaScrollView.scrollViewToBottom()
         }
         
-        temporaryOperandValues = [initialValue]
+        temporaryOperandValues.removeAll()
         currentValueLabel.text = initialValue
         isCalculated = false
         signIsPositive = true
@@ -114,7 +120,7 @@ class ViewController: UIViewController {
     }
     
     func resetTemporaryOerandValues() {
-        temporaryOperandValues = [initialValue]
+        temporaryOperandValues.removeAll()
         currentValueLabel.text = initialValue
     }
     
@@ -144,7 +150,7 @@ class ViewController: UIViewController {
     
     @IBAction private func hitEqualButton(_ sender: UIButton) {
         guard isCalculated == false,
-              valuesForCalculate != [initialValue] else {
+              !valuesForCalculate.isEmpty else {
                   resetTemporaryOerandValues()
               return
         }

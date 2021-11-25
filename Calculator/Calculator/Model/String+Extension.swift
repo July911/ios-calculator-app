@@ -6,3 +6,15 @@ extension String {
         return splitedString
     }
 }
+
+extension String {
+    func hasComma() -> Bool {
+        self.contains(".")
+    }
+}
+
+extension Array {
+    func hasComma() -> Bool{
+        self.contains(".")
+    }
+}
