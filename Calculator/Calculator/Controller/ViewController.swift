@@ -160,7 +160,10 @@ class ViewController: UIViewController {
             currentValueLabel.text = "NaN"
         } else {
             resetToInitialState()
-            currentValueLabel.text = addCommaToValue(doubleTypeResult)
+            let insertedComma = String(doubleTypeResult).insertComma()
+            let intergerAndDecimal = insertedComma.split(with: ".")
+            
+            currentValueLabel.text = (intergerAndDecimal.last == "0" ? intergerAndDecimal.first : insertedComma)
         }
         isCalculated = true
     }
