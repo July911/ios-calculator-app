@@ -76,7 +76,7 @@ class ViewController: UIViewController {
         isOperatorEntered = false
     }
     
-    private func endOperandInput() {
+    private func addOperandToValuesForCalculate() {
         if signIsPositive {
             valuesForCalculate.append(temporaryOperandValues.joined())
         } else {
@@ -88,8 +88,7 @@ class ViewController: UIViewController {
             formulaScrollView.scrollViewToBottom()
         }
         
-        temporaryOperandValues.removeAll()
-        currentValueLabel.text = initialValue
+        resetTemporaryOerandValues()
         isCalculated = false
         signIsPositive = true
     }
@@ -98,7 +97,7 @@ class ViewController: UIViewController {
         guard let inputButtonTitle = sender.titleLabel?.text else {
             return
         }
-        endOperandInput()
+        addOperandToValuesForCalculate()
         resetTemporaryOerandValues()
         if isOperatorEntered {
             valuesForCalculate.removeLast()
@@ -152,7 +151,8 @@ class ViewController: UIViewController {
                   resetTemporaryOerandValues()
               return
         }
-        endOperandInput()
+        addOperandToValuesForCalculate()
+        resetTemporaryOerandValues()
         let calculator = ExpressionParser.self
         let doubleTypeResult = calculator.parse(from: valuesForCalculate.joined()).result()
         if doubleTypeResult.isNaN {
