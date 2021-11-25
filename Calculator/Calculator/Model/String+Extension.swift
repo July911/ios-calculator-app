@@ -15,6 +15,9 @@ extension String {
 
 extension Array {
     func hasComma() -> Bool{
-        self.contains(".")
+        (self.filter{ ($0 as? String) == "." }).count == 0 ? false : true
     }
 }
+
+
+

@@ -12,9 +12,7 @@ class ViewController: UIViewController {
     private var temporaryOperandValues: [String] = []
     private var isOperatorEntered: Bool = false
     private var signIsPositive: Bool = true
-    private var hasComma: Bool {
-        temporaryOperandValues.contains(".")
-    }
+ 
     var isCalculated: Bool = false
     
     
@@ -53,7 +51,7 @@ class ViewController: UIViewController {
                   return
               }
         
-        if hasComma {
+        if temporaryOperandValues.hasComma() {
             guard !inputButtonTitle.hasComma() else { return }
         } else {
             if (inputButtonTitle == "0" && temporaryOperandValues.first == "0") ||
@@ -64,7 +62,7 @@ class ViewController: UIViewController {
         temporaryOperandValues.append(inputButtonTitle)
         
         let addcommaOperand: String
-        if temporaryOperandValues.contains(".") {
+        if temporaryOperandValues.hasComma() {
             addcommaOperand = temporaryOperandValues.joined()
         } else {
             addcommaOperand = addCommaToValue(Double(temporaryOperandValues.joined()) ?? 0)
